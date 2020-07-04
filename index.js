@@ -8,8 +8,8 @@ async function fetchPlaces(type) {
 
     const params = {
       key: config.GOOGLE_PLACES_API_KEY,
-      location: '-21.7842308,-48.1793184',
-      radius: '100',
+      location: config.location,
+      radius: config.radius,
       type
     };
 
