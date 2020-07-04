@@ -1,3 +1,4 @@
+const fs = require('fs');
 const axios = require('axios');
 const config = require('./config');
 
@@ -43,7 +44,7 @@ async function fetchPlaces(type) {
 async function fetchPlacesDetails(placesIds, type) {
   try {
     let csv = 'Bairro,Nome do estabelecimento,Telefone,WebSite,Setor,Endereço';
-    const filePath = `${type}.csv`;
+    const filePath = `Planilhas/${type}.csv`;
 
     const url = 'https://maps.googleapis.com/maps/api/place/details/json';
     const key = config.GOOGLE_PLACES_API_KEY;
@@ -67,7 +68,7 @@ async function fetchPlacesDetails(placesIds, type) {
       const setor = type;
       const endereco = data.result.formatted_address || '-';
 
-      csv += `\n${bairro},${nome_estabelecimento},${telefone},${website},${setor},${endereco}`;
+      csv += `\n${bairro},${nome_estabelecimento},${telefone},${website},${setor},"${endereco}"`;
     }
 
     fs.writeFile(filePath, csv, (err) => {
