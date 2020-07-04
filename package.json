@@ -1,0 +1,9 @@
+{
+  "name": "api-busca-locais",
+  "version": "1.0.0",
+  "description": "Api para buscar restaurantes, bares e padarias em uma cidade",
+  "main": "index.js",
+  "author": "Guiradi <g.ferreira@unesp.br>",
+  "license": "MIT",
+  "private": false
+}
