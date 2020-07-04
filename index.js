@@ -20,21 +20,6 @@ async function fetchPlaces(type) {
     });
 
     const placesIds = data.results.map(({ place_id }) => place_id);
-    let pagetoken = data.next_page_token || null;
-
-    while (pagetoken) {
-      console.log(`Buscando ${type}... ${placesIds.length} encontrados!`);
-
-      const { data: moreData } = await axios({
-        url,
-        method: 'get',
-        params
-      });
-
-      placesIds.push(...moreData.results.map(({ place_id }) => place_id));
-
-      pagetoken = moreData.next_page_token || null;
-    }
 
     return placesIds;
   } catch (error) {
@@ -95,9 +80,9 @@ async function fetchAndSaveCSV(type, Tipo) {
   }
 }
 
-// fetchAndSaveCSV('restaurant', 'Restaurante');
+fetchAndSaveCSV('restaurant', 'Restaurante');
 fetchAndSaveCSV('cafe', 'Café');
-// fetchAndSaveCSV('convenience_store', 'Conveniência');
-// fetchAndSaveCSV('gas_station', 'Posto de Gasolina');
-// fetchAndSaveCSV('liquor_store', 'Loja de Bebidas');
-// fetchAndSaveCSV('supermarket', 'Mercado');
+fetchAndSaveCSV('convenience_store', 'Conveniência');
+fetchAndSaveCSV('gas_station', 'Posto de Gasolina');
+fetchAndSaveCSV('liquor_store', 'Loja de Bebidas');
+fetchAndSaveCSV('supermarket', 'Mercado');
