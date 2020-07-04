@@ -23,6 +23,8 @@ async function fetchPlaces(type) {
     let pagetoken = data.next_page_token || null;
 
     while (pagetoken) {
+      console.log(`Buscando ${type}... ${placesIds.length} encontrados!`);
+
       const { data: moreData } = await axios({
         url,
         method: 'get',
@@ -48,8 +50,11 @@ async function fetchPlacesDetails(placesIds, type) {
 
     const url = 'https://maps.googleapis.com/maps/api/place/details/json';
     const key = config.GOOGLE_PLACES_API_KEY;
+    let i = 0;
 
     for await (const place_id of placesIds) {
+      console.log(`Buscando ${type}... ${++i}/${placesIds.length} já buscados`);
+
       const { data } = await axios({
         url,
         method: 'get',
@@ -90,9 +95,9 @@ async function fetchAndSaveCSV(type, Tipo) {
   }
 }
 
-fetchAndSaveCSV('restaurant', 'Restaurante');
+// fetchAndSaveCSV('restaurant', 'Restaurante');
 fetchAndSaveCSV('cafe', 'Café');
-fetchAndSaveCSV('convenience_store', 'Conveniência');
-fetchAndSaveCSV('gas_station', 'Posto de Gasolina');
-fetchAndSaveCSV('liquor_store', 'Loja de Bebidas');
-fetchAndSaveCSV('supermarket', 'Mercado');
+// fetchAndSaveCSV('convenience_store', 'Conveniência');
+// fetchAndSaveCSV('gas_station', 'Posto de Gasolina');
+// fetchAndSaveCSV('liquor_store', 'Loja de Bebidas');
+// fetchAndSaveCSV('supermarket', 'Mercado');
