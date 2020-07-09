@@ -4,4 +4,4 @@ const GooglePlaces = require('./GooglePlaces')
 const TypeList = require('./utils/TypeEnum')
 
 const G = new GooglePlaces()
-G.createDatabase(Object.keys(TypeList)[0])
+G.fetchType(Object.keys(TypeList)[0])

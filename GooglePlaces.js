@@ -165,7 +165,7 @@ module.exports = class GooglePlaces {
       await writeFileAsync(placesDatabasePath, JSON.stringify(newPlacesDetails))
     }
 
-    console.log('Fim')
+    console.log('Salvo!')
 
     return true
   }
@@ -194,6 +194,8 @@ module.exports = class GooglePlaces {
       let csv = 'Bairro,Nome do estabelecimento,Telefone,WebSite,Setor,Endereço'
 
       for await (const type of Object.keys(TypeList)) {
+        console.log(`Transformando ${TypeList[type]} para planilha...`)
+
         const typeFetched = await this.createDatabase(type)
 
         if (typeFetched) {
@@ -214,6 +216,8 @@ module.exports = class GooglePlaces {
       let csv = 'Bairro,Nome do estabelecimento,Telefone,WebSite,Setor,Endereço'
 
       const typeFetched = await this.createDatabase(type)
+
+      console.log(`Transformando ${TypeList[type]} para planilha...`)
 
       if (typeFetched) {
         csv += await this.transformToCSV(type)
