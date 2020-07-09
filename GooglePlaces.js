@@ -177,7 +177,7 @@ module.exports = class GooglePlaces {
 
       let csvString = ''
 
-      placesDatabase.forEach((place) => {
+      JSON.parse(placesDatabase).forEach((place) => {
         csvString += `\n${place.bairro},${place.nomeEstabelecimento},${place.telefone},${place.website},${place.setor},"${place.endereco}"`
       })
 
