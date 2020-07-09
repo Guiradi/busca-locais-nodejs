@@ -7,6 +7,7 @@ const G = new GooglePlaces()
 
 // Escolhe 1 método específico
 // G.fetchType(Object.keys(TypeList)[0])
+// G.fetchType('supermarket')
 
 // Busca todos os métodos em uma única planilha
 // G.fetchAllPlacesType()
