@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable camelcase */
 /* eslint-disable no-console */
@@ -145,7 +146,6 @@ module.exports = class GooglePlaces {
     const newPlacesDetails = []
 
     console.log(`Buscando informações sobre ${TypeList[type]} encontrados...`)
-    // eslint-disable-next-line no-restricted-syntax
     for await (const place_id of notInsertedIds) {
       const placeDetail = await this.fetchPlaceDetails(place_id, type)
       newPlacesDetails.push(placeDetail)
@@ -166,55 +166,63 @@ module.exports = class GooglePlaces {
     }
 
     console.log('Fim')
+
+    return true
   }
 
-  // fetchPlacesDetails = async (placesIds, type) => {
-  //   try {
-  //     let csv = 'Bairro,Nome do estabelecimento,Telefone,WebSite,Setor,Endereço'
-  //     const filePath = `Planilhas/${type}.csv`
+  async transformToCSV(type) {
+    try {
+      const placesDatabasePath = `./Database/data/${type}.json`
+      const placesDatabase = await readFileAsync(placesDatabasePath)
 
-  //     const url = 'https://maps.googleapis.com/maps/api/place/details/json'
-  //     const key = config.GOOGLE_PLACES_API_KEY
+      let csvString = ''
 
-  //     // eslint-disable-next-line no-restricted-syntax
-  //     for await (const place_id of placesIds) {
-  // const { data } = await axios({
-  //   url,
-  //   method: 'get',
-  //   params: {
-  //     place_id,
-  //     key,
-  //     fields:
-  //       'address_components,name,formatted_phone_number,website,formatted_address',
-  //   },
-  // })
+      placesDatabase.forEach((place) => {
+        csvString += `\n${place.bairro},${place.nomeEstabelecimento},${place.telefone},${place.website},${place.setor},"${place.endereco}"`
+      })
 
-  // const bairroObj = data.result.address_components.find((x) =>
-  //   x.types.includes('sublocality')
-  // )
-  // const bairro = bairroObj ? bairroObj.long_name : '-'
-  // const nome_estabelecimento = data.result.name || '-'
-  // const telefone = data.result.formatted_phone_number || '-'
-  // const website = data.result.website || '-'
-  // const setor = type
-  // const endereco = data.result.formatted_address || '-'
+      return csvString
+    } catch (error) {
+      console.error('transformToCSV', error)
+      throw error
+    }
+  }
 
-  // csv += `\n${bairro},${nome_estabelecimento},${telefone},${website},${setor},"${endereco}"`
-  //     }
+  async fetchAllPlacesType() {
+    try {
+      const csvPath = './Database/Planilhas/Todos os tipos.csv'
+      let csv = 'Bairro,Nome do estabelecimento,Telefone,WebSite,Setor,Endereço'
 
-  //     // eslint-disable-next-line consistent-return
-  //     fs.writeFile(filePath, csv, (err) => {
-  //       if (err) return console.error(err)
-  //       console.log(`${type} salvo em ${filePath}`)
-  //     })
-  //   } catch (error) {
-  //     console.error(error)
-  //     throw error
-  //   }
-  // }
+      for await (const type of Object.keys(TypeList)) {
+        const typeFetched = await this.createDatabase(type)
 
-  // fetchAndSaveCSV = async (type, Tipo) => {
-  //   const placesIds = await this.fetchPlaces(type)
-  //   await this.fetchPlacesDetails(placesIds, Tipo)
-  // }
+        if (typeFetched) {
+          csv += await this.transformToCSV(type)
+        }
+      }
+
+      await writeFileAsync(csvPath, csv)
+    } catch (error) {
+      console.log('fetchAllPlacesType', error)
+      throw error
+    }
+  }
+
+  async fetchType(type) {
+    try {
+      const csvPath = `./Database/Planilhas/${TypeList[type]}.csv`
+      let csv = 'Bairro,Nome do estabelecimento,Telefone,WebSite,Setor,Endereço'
+
+      const typeFetched = await this.createDatabase(type)
+
+      if (typeFetched) {
+        csv += await this.transformToCSV(type)
+      }
+
+      await writeFileAsync(csvPath, csv)
+    } catch (error) {
+      console.log('fetchType', error)
+      throw error
+    }
+  }
 }
