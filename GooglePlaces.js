@@ -5,18 +5,11 @@
 const fs = require('fs')
 const axios = require('axios')
 const { promisify } = require('util')
-// const { uniq } = require('lodash')
 const config = require('./config')
 const TypeList = require('./utils/TypeEnum')
 
 const readFileAsync = promisify(fs.readFile)
 const writeFileAsync = promisify(fs.writeFile)
-
-// fs.readFile('credentials.json', (err, content) => {
-//   if (err) return console.log('Error loading client secret file:', err)
-//   // Authorize a client with credentials, then call the Google Calendar API.
-//   authorize(JSON.parse(content), listEvents)
-// })
 
 function sleep(milliseconds) {
   const date = Date.now()
